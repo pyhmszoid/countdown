@@ -26,7 +26,7 @@ export const Timer = (): React.ReactElement => {
 		start: start,
 		reset: reset,
 		onTimerEnd: handleEndTimer,
-		tick: 1000,
+		tick: 1,
 		loop,
 	});
 

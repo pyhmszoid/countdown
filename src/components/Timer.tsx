@@ -5,9 +5,9 @@ import { LoadingBar } from "./loading-bar/LoadingBar";
 
 export const Timer = (): React.ReactElement => {
 	const [startUI, setStartUI] = useState<boolean>(false);
-	const [start, setStart] = useState<boolean>(false);
+	const [start, setStart] = useState<boolean>(true);
 	const [reset, setReset] = useState<boolean>(false);
-	const [loop, setLoop] = useState<boolean>(false);
+	const [loop, setLoop] = useState<boolean>(true);
 
 	const [timera, setTimera] = useState<number>(0);
 
@@ -18,7 +18,6 @@ export const Timer = (): React.ReactElement => {
 		} else {
 			setStart(false);
 		}
-		console.log(timera - Date.now());
 	};
 
 	const [timer, asd, timerM, isActive] = useTimer({
@@ -40,7 +39,6 @@ export const Timer = (): React.ReactElement => {
 	};
 
 	const handleResetClick = () => {
-		console.log("click");
 		setReset(!reset);
 		setStart(false);
 	};

@@ -103,7 +103,6 @@ const TestSvg = () => {
 			normalized = -1;
 		}
 
-		console.log(svg.currentScale);
 		//viewBox.width += normalized * scale;
 		////viewBox.height += normalized * scale;
 		svg.viewBox.baseVal.width += normalized * scale;
@@ -140,7 +139,6 @@ const TestSvg = () => {
 		viewBox.height *= scaleDelta;*/
 	};
 
-	console.log("redraw");
 	return (
 		<div
 			style={{

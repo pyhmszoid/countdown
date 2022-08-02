@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { dsa } from "./time";
+import { useDeltaTime } from "./useDeltaTime";
 
 interface IProps {
 	timer: number;
@@ -32,7 +32,7 @@ export const useTimer = (
 	const [isActive, setIsActive] = useState<boolean>(props.start);
 	const [isEnded, setIsEnded] = useState(false);
 
-	const [dt, update]: [number, boolean] = dsa({ start: isActive });
+	const [dt, update] = useDeltaTime({ start: isActive });
 
 	useEffect(() => {
 		initializeTimer();
@@ -54,7 +54,7 @@ export const useTimer = (
 			return;
 		}
 
-		const time = new Date(timer.getTime() - dt);
+		const time = new Date(timer.getTime() - dt.current);
 
 		if (time.getTime() <= 0) {
 			endTimer();

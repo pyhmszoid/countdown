@@ -1,84 +1,80 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTimer } from "../components/useTimer";
 import { EDirectionBar } from "./loading-bar/Bar";
 import { LoadingBar } from "./loading-bar/LoadingBar";
 
 export const Timer = (): React.ReactElement => {
-	const [startUI, setStartUI] = useState<boolean>(false);
-	const [start, setStart] = useState<boolean>(true);
-	const [reset, setReset] = useState<boolean>(false);
-	const [loop, setLoop] = useState<boolean>(true);
-
-	const [timera, setTimera] = useState<number>(0);
+	const [isStart, setIsStart] = useState<boolean>(true);
+	const [isReset, setIsReset] = useState<boolean>(false);
+	const [isLoop, setIsLoop] = useState<boolean>(true);
 
 	const handleEndTimer = () => {
-		if (loop) {
-			setReset(!reset);
-			setStart(true);
+		if (isLoop) {
+			setIsReset(!isReset);
+			setIsStart(true);
 		} else {
-			setStart(false);
+			setIsStart(false);
 		}
 	};
 
-	const [timer, asd, timerM, isActive] = useTimer({
-		timer: 10,
-		start: start,
-		reset: reset,
+	const [floorTimer, timer, idleTimer] = useTimer({
+		time: 10,
+		start: isStart,
+		reset: isReset,
 		onTimerEnd: handleEndTimer,
 		tick: 1,
-		loop,
+		loop: isLoop,
 	});
 
-	useEffect(() => {
-		setStartUI(isActive);
-	}, [isActive]);
-
 	const handleStartClick = () => {
-		setStart(!start);
-		setTimera(Date.now());
+		setIsStart(!isStart);
 	};
 
 	const handleResetClick = () => {
-		setReset(!reset);
-		setStart(false);
+		setIsReset(!isReset);
+		setIsStart(false);
 	};
 
 	const handleLoopClick = () => {
-		setLoop(!loop);
+		setIsLoop(!isLoop);
 	};
 
 	return (
 		<>
-			{!startUI ? (
+			{!isStart ? (
 				<button onClick={handleStartClick}>{"start"}</button>
 			) : (
 				<button onClick={handleStartClick}>{"pause"}</button>
 			)}
 			<button onClick={handleResetClick}>{"reset"}</button>
-			<input type="checkbox" onChange={handleLoopClick} checked={loop} />
+			<input
+				type="checkbox"
+				onChange={handleLoopClick}
+				checked={isLoop}
+			/>
 
 			<div>
-				{timer.getMinutes() +
+				{floorTimer.getMinutes() +
 					" : " +
-					timer.getSeconds() +
+					floorTimer.getSeconds() +
 					" : " +
-					timer.getMilliseconds()}
+					floorTimer.getMilliseconds()}
 			</div>
 			<div>
-				{timerM.getMinutes() +
+				{idleTimer.getMinutes() +
 					" : " +
-					timerM.getSeconds() +
+					idleTimer.getSeconds() +
 					" : " +
-					timerM.getMilliseconds()}
+					idleTimer.getMilliseconds()}
 			</div>
-			<div>{timer.getTime() + " / " + timerM.getTime()}</div>
+			<div>{floorTimer.getTime() + " / " + idleTimer.getTime()}</div>
 			<LoadingBar
-				percent={asd.getTime() / timerM.getTime()}
+				percent={timer.getTime() / idleTimer.getTime()}
 				elementCount={10}
-				margfinBar={1}
-				marginElement={1}
+				margfinBar={0}
+				marginElement={0}
 				style={{ width: 300, height: 31, margin: 10 }}
-				direction={EDirectionBar.LEFT}
+				direction={EDirectionBar.TOP}
 			/>
 		</>
 	);

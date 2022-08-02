@@ -29,7 +29,7 @@ export const LoadingBar = (props: IProps): React.ReactElement => {
 		}
 	}, [props.margfinBar, props.marginElement]);
 
-	const dsa = (): ReactElement[] => {
+	const renderRectElements = (): ReactElement[] => {
 		const element: ReactElement[] = [];
 		const value = props.elementCount * props.percent;
 
@@ -70,7 +70,7 @@ export const LoadingBar = (props: IProps): React.ReactElement => {
 					margin: props.margfinBar,
 				}}
 			>
-				{dsa()}
+				{renderRectElements()}
 			</div>
 		</div>
 	);

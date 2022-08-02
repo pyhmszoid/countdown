@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDeltaTime } from "./useDeltaTime";
 
 interface IProps {
-	timer: number;
+	time: number;
 	start: boolean;
 	reset: boolean;
 	tick: number;
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const useTimerDef: IProps = {
-	timer: 0,
+	time: 0,
 	start: true,
 	reset: false,
 	tick: 1,
@@ -22,12 +22,10 @@ const useTimerDef: IProps = {
 	onTimerEnd: () => {},
 };
 
-export const useTimer = (
-	props: IProps = useTimerDef
-): [Date, Date, Date, boolean] => {
-	const [timer, setTimer] = useState<Date>(new Date(0));
-	const [timerShow, setTimerShow] = useState<Date>(new Date(0));
-	const [timerM, setTimerM] = useState<Date>(new Date(0));
+export const useTimer = (props: IProps = useTimerDef): [Date, Date, Date] => {
+	const timer = useRef<Date>(new Date(0));
+	const floorTimer = useRef<Date>(new Date(0));
+	const [idleTimer, setIdleTimer] = useState<Date>(new Date(0));
 
 	const [isActive, setIsActive] = useState<boolean>(props.start);
 	const [isEnded, setIsEnded] = useState(false);
@@ -36,7 +34,7 @@ export const useTimer = (
 
 	useEffect(() => {
 		initializeTimer();
-	}, []);
+	}, [props.reset]);
 
 	useEffect(() => {
 		setIsActive(props.start);
@@ -46,49 +44,40 @@ export const useTimer = (
 	}, [props.start]);
 
 	useEffect(() => {
-		initializeTimer();
-	}, [props.reset]);
-
-	useEffect(() => {
 		if (!isActive || isEnded) {
 			return;
 		}
 
-		const time = new Date(timer.getTime() - dt.current);
+		timer.current = new Date(timer.current.getTime() - dt.current);
 
-		if (time.getTime() <= 0) {
+		if (timer.current.getTime() <= 0) {
 			endTimer();
 			return;
 		}
-		let tm = timerShow.getTime();
 
-		while (tm - time.getTime() >= props.tick) {
-			tm = Math.round(time.getTime() / props.tick) * props.tick;
+		let tm = floorTimer.current.getTime();
+		while (tm - timer.current.getTime() >= props.tick) {
+			tm = Math.round(timer.current.getTime() / props.tick) * props.tick;
 		}
-
-		if (tm !== timerShow.getTime()) {
-			setTimerShow(new Date(tm));
-		}
-
-		setTimer(time);
+		floorTimer.current = new Date(tm);
 	}, [isActive, update]);
 
 	const initializeTimer = () => {
 		const dat = new Date(0);
-		dat.setSeconds(props.timer);
+		dat.setSeconds(props.time);
 
-		setTimer(dat);
-		setTimerShow(dat);
-		setTimerM(dat);
+		timer.current = dat;
+		floorTimer.current = dat;
+		setIdleTimer(dat);
 		setIsEnded(false);
 	};
 
 	const endTimer = () => {
-		setTimerShow(new Date(0));
-		setTimer(new Date(0));
+		floorTimer.current = new Date(0);
+		timer.current = new Date(0);
 		setIsEnded(true);
 		props.onTimerEnd();
 	};
 
-	return [timerShow, timer, timerM, isActive];
+	return [floorTimer.current, timer.current, idleTimer];
 };

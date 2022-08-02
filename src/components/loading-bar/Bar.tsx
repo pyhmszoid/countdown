@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export enum EDirectionBar {
 	NONE = 0x0,
@@ -14,16 +14,16 @@ interface IProps {
 }
 
 export const Bar = (props: IProps) => {
-	const [width, setWidth] = useState(100);
-	const [height, setheight] = useState(100);
+	const width = useRef<number>(100);
+	const height = useRef<number>(100);
 
 	useEffect(() => {
 		if (props.direction & (EDirectionBar.LEFT | EDirectionBar.RIGHT)) {
-			setWidth(props.percent);
+			width.current = props.percent;
 		}
 
 		if (props.direction & (EDirectionBar.BOTTOM | EDirectionBar.TOP)) {
-			setheight(props.percent);
+			height.current = props.percent;
 		}
 	}, [props.percent]);
 
@@ -31,8 +31,8 @@ export const Bar = (props: IProps) => {
 		<div
 			style={{
 				backgroundColor: "red",
-				width: width + "%",
-				height: height + "%",
+				width: width.current + "%",
+				height: height.current + "%",
 				alignSelf: "flex-end",
 			}}
 		></div>

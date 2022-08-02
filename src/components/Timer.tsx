@@ -71,13 +71,11 @@ export const Timer = (): React.ReactElement => {
 			<LoadingBar
 				percent={timer.getTime() / idleTimer.getTime()}
 				elementCount={10}
-				margfinBar={0}
-				marginElement={0}
+				margfinBar={1}
+				marginElement={1}
 				style={{ width: 300, height: 31, margin: 10 }}
 				direction={EDirectionBar.TOP}
 			/>
 		</>
 	);
 };
-/*for (let i = 0; i < 500; )
-					<div style={{ backgroundColor: "green", width: 10 }}></div>*/

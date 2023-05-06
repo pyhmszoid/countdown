@@ -1,11 +1,11 @@
 import { Canvas } from "../components/canvas";
-import { Timer } from "../components/Timer";
+import { Timer } from "../components/timer/Timer";
+import { Quizz } from "./../components/quizz";
 
 function App() {
 	return (
 		<div style={{ margin: 10 }}>
-			<Timer />
-			<Canvas />
+			<Quizz />
 		</div>
 	);
 }

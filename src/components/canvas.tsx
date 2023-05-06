@@ -9,11 +9,6 @@ export const Canvas = (props: any) => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
 
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-		canvas.style.width = window.innerWidth + "";
-		canvas.style.height = window.innerHeight + "";
-
 		const context: CanvasRenderingContext2D | null =
 			canvas.getContext("2d");
 		if (!context) return;

@@ -37,6 +37,9 @@ export const LoadingBar = (props: IProps): React.ReactElement => {
 			let perc = 100;
 			if (i + 1 > value) {
 				perc = (value - i) * 100;
+				if (perc > 100) {
+					perc = 100;
+				}
 			}
 			const elem = (
 				<BarContainer
